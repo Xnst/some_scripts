@@ -1,0 +1,40 @@
+#! python
+
+import datetime as dt
+import sys
+
+args = sys.argv
+
+thisYear = dt.datetime.today().isocalendar()[0]
+dat0 = dt.date(thisYear, 1, 1)
+
+nonum = True
+print('')
+
+if len(args) > 1:
+    nonum = False
+    dd = {}
+    for i in range(365):
+        dat = dat0 + dt.timedelta(i)
+        w = str(dat.isocalendar()[1])
+        if w not in dd.keys():
+            dd[w] = []
+        dd[w].append(dat)
+
+    for arg in args[1:]:
+        if arg.isdigit():
+            try:
+                arg = str(int(arg))
+                d0 = min(dd[arg])
+                d1 = max(dd[arg])
+                print('week {} : {} - {}'.format(arg,
+                                                 d0.strftime('%d %b'),
+                                                 d1.strftime('%d %b')))
+            except KeyError:
+                nonum = True
+        else:
+            nonum = True
+if nonum:
+    print('this week: ', dt.datetime.today().isocalendar()[1])
+
+print('')
